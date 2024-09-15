@@ -97,6 +97,7 @@
                     method: 'POST',
                     data: { id: id },
                     success: function () {
+                        location.reload();
                         loadEmployees();  // Recargar la lista de empleados después de eliminar
                         alert("Empleado eliminado exitosamente.");
                     },
