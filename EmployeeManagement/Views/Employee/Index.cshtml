@@ -9,7 +9,7 @@
     <a href="/Employee/AddEmployeeView" class="btn btn-success mb-3">Agregar Nuevo Empleado</a>
 
     <!-- Tabla de empleados -->
-    <table class="table table-striped mt-4">
+    <table id="employeesTable" class="table table-striped mt-4">
         <thead>
             <tr>
                 <th>Nombre</th>
@@ -49,6 +49,12 @@
                     </tr>`;
                         $('#employeeTableBody').append(row);
                     });
+
+                    $('#employeesTable').DataTable({
+                        "paging": true,
+                        "searching": true,
+                        "ordering": true
+                    });
                 }
             });
         }
@@ -65,5 +71,6 @@
                 }
             });
         });
+
     });
 </script>
