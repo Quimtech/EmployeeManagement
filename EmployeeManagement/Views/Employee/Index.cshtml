@@ -1,0 +1,69 @@
+@{
+    ViewBag.Title = "Gestión de Empleados";
+}
+
+<div class="container">
+    <h2>Gestión de Empleados</h2>
+
+    <!-- Button para agregar un nuevo empleado -->
+    <a href="/Employee/AddEmployeeView" class="btn btn-success mb-3">Agregar Nuevo Empleado</a>
+
+    <!-- Tabla de empleados -->
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Cargo</th>
+                <th>Oficina</th>
+                <th>Salario</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="employeeTableBody">
+            <!-- Aquí se insertaran dinamicamente los empleados -->
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        loadEmployees();
+
+        function loadEmployees() {
+            $.ajax({
+                url: '/Employee/GetEmployees',
+                method: 'GET',
+                success: function (data) {
+                    $('#employeeTableBody').empty();
+                    $.each(data, function (index, employee) {
+                        var row = `<tr>
+                        <td>${employee.Name}</td>
+                        <td>${employee.Position}</td>
+                        <td>${employee.Office}</td>
+                        <td>${employee.Salary}</td>
+                        <td>
+                            <a href="/Employee/EditEmployeeView/${employee.Id}" class="btn btn-warning">Editar</a>
+                            <button class="btn btn-danger deleteBtn" data-id="${employee.Id}">Eliminar</button>
+                        </td>
+                    </tr>`;
+                        $('#employeeTableBody').append(row);
+                    });
+                }
+            });
+        }
+
+        // Eliminar empleado
+        $(document).on('click', '.deleteBtn', function () {
+            var id = $(this).data('id');
+            $.ajax({
+                url: '/Employee/DeleteEmployee',
+                method: 'POST',
+                data: { id: id },
+                success: function () {
+                    loadEmployees();
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,59 @@
+@{
+    ViewBag.Title = "Agregar Nuevo Empleado";
+}
+
+<div class="container">
+    <h2>Agregar Nuevo Empleado</h2>
+
+    <!-- Formulario para add empleados -->
+    <form id="addEmployeeForm">
+        <div class="form-group">
+            <label for="Name">Nombre</label>
+            <input type="text" class="form-control" id="Name" name="Name" required pattern="[A-Za-z\s]+" title="El nombre debe contener solo letras y espacios." />
+        </div>
+        <div class="form-group">
+            <label for="Position">Cargo</label>
+            <input type="text" class="form-control" id="Position" name="Position" required pattern="[A-Za-z\s]+" title="El cargo debe contener solo letras y espacios." />
+        </div>
+        <div class="form-group">
+            <label for="Office">Oficina</label>
+            <input type="text" class="form-control" id="Office" name="Office" required pattern="[A-Za-z\s]+" title="La oficina debe contener solo letras y espacios." />
+        </div>
+        <div class="form-group">
+            <label for="Salary">Salario</label>
+            <input type="number" class="form-control" id="Salary" name="Salary" required min="0" step="0.01" title="Ingrese un salario válido (número positivo)." />
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a href="/Employee/Index" class="btn btn-secondary">Volver</a>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#addEmployeeForm').submit(function (event) {
+            event.preventDefault();
+            var employeeData = $(this).serialize();
+            $.ajax({
+                url: '/Employee/AddEmployee',
+                method: 'POST',
+                data: employeeData,
+                success: function (result) {
+                    if (result.success) {
+                        alert('Empleado agregado exitosamente');
+                        window.location.href = '/Employee/Index'; // Redirigir a la lista de empleados
+                    } else {
+                        alert('Error al agregar el empleado');
+                        if (result.errors) {
+                            console.log(result.errors); // console.log de los errores de validación
+                        }
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert('Ocurrió un error: ' + error);
+                    console.log(xhr.responseText); // console.log de los detalles del error
+                }
+            });
+        });
+    });
+</script>
+
